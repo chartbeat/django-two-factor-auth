@@ -50,7 +50,7 @@ def profile(request, template_name='demo/profile.html',
 def remove_computer_verification(request, id):
     if request.method == 'POST':
         try:
-            request.user.verifiedcomputer_set.get(id=id).delete()
+            request.user.tf_verified_computers.get(id=id).delete()
         except VerifiedComputer.DoesNotExist:
             pass
     return redirect(profile)

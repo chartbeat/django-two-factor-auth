@@ -15,10 +15,10 @@ class Command(BaseCommand):
         except User.DoesNotExist:
             raise CommandError('User with username "%s" not found' % args[0])
 
-        if not user.token:
+        if not user.tf_token:
             raise CommandError('User does not have a secret associated')
 
-        accepted, drift = accept_totp(args[1], user.token.seed)
+        accepted, drift = accept_totp(args[1], user.tf_token.seed)
 
         if accepted:
             print 'Token accepted (clock drifted %s seconds)' % drift

@@ -17,7 +17,7 @@ class Command(BaseCommand):
             raise CommandError('User with username "%s" not found' % args[0])
 
         try:
-            token = user.token
+            token = user.tf_token
         except Token.DoesNotExist:
             token = Token(user=user)
 

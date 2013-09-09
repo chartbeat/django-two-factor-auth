@@ -133,7 +133,7 @@ def verify_computer(request, template_name='two_factor/verify_computer.html',
 
             # set computer verification
             if form.cleaned_data['remember']:
-                vf = user.verifiedcomputer_set.create(
+                vf = user.tf_verified_computers.create(
                     verified_until=now() + timedelta(days=30),
                     last_used_at=now(),
                     ip=request.META['REMOTE_ADDR'])
@@ -160,7 +160,7 @@ def verify_computer(request, template_name='two_factor/verify_computer.html',
         except VerifiedComputer.DoesNotExist:
             pass
 
-        token = user.token
+        token = user.tf_token
         if token.method in ('call', 'sms'):
             #todo use backup phone
             #todo resend message + throttling
@@ -195,8 +195,8 @@ class Disable(FormView):
 
     def form_valid(self, form):
         if hasattr(self.request.user, 'token'):
-            self.request.user.token.delete()
-        self.request.user.verifiedcomputer_set.all().delete()
+            self.request.user.tf_token.delete()
+        self.request.user.tf_verified_computers.all().delete()
         return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
 
 
