@@ -1,6 +1,10 @@
 from django.contrib.auth.models import User
 from django.core.management import BaseCommand, CommandError
 from oath.totp import accept_totp
+from django.conf import settings
+
+TF_FORWARD_DRIFT = getattr(settings,'TF_FORWARD_DRIFT', 1)
+TF_BACKWARD_DRIFT = getattr(settings,'TF_BACKWARD_DRIFT', 1)
 
 
 class Command(BaseCommand):
@@ -18,7 +22,9 @@ class Command(BaseCommand):
         if not user.tf_token:
             raise CommandError('User does not have a secret associated')
 
-        accepted, drift = accept_totp(args[1], user.tf_token.seed)
+        accepted, drift = accept_totp(args[1], user.tf_token.seed,
+                                      forward_drift=TF_FORWARD_DRIFT,
+                                      backward_drift=TF_BACKWARD_DRIFT)
 
         if accepted:
             print 'Token accepted (clock drifted %s seconds)' % drift

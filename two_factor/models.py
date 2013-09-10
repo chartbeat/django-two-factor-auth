@@ -2,6 +2,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import User
 from two_factor import call_gateways, sms_gateways
+from django.conf import settings
+
+TF_FORWARD_DRIFT = getattr(settings,'TF_FORWARD_DRIFT', 1)
+TF_BACKWARD_DRIFT = getattr(settings,'TF_BACKWARD_DRIFT', 1)
 
 TOKEN_METHODS = [
     ('generator', _('Token generator (iPhone/Android App)')),

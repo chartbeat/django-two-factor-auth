@@ -3,7 +3,10 @@ from django.contrib.auth import authenticate
 from django.utils.translation import ugettext_lazy as _
 from oath import accept_totp
 from two_factor.models import TOKEN_METHODS
+from django.conf import settings
 
+TF_FORWARD_DRIFT = getattr(settings,'TF_FORWARD_DRIFT', 1)
+TF_BACKWARD_DRIFT = getattr(settings,'TF_BACKWARD_DRIFT', 1)
 
 class ComputerVerificationForm(forms.Form):
     """
@@ -62,7 +65,9 @@ class TokenVerificationForm(forms.Form):
     def clean(self):
         token = self.cleaned_data.get('token')
         if token:
-            accepted, drift = accept_totp(key=self.seed, response=token)
+            accepted, drift = accept_totp(key=self.seed, response=token,
+                                          forward_drift=TF_FORWARD_DRIFT,
+                                          backward_drift=TF_BACKWARD_DRIFT)
             if not accepted:
                 raise forms.ValidationError(
                     self.error_messages['invalid_token'])
