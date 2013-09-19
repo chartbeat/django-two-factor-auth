@@ -247,6 +247,7 @@ class Enable(SessionWizardView):
             self.storage.data['token'] = Token(seed=seed,
                                                user=self.request.user)
             self.storage.data['extra_data']['qr_url'] = get_qr_url(alias, seed)
+            self.storage.data['extra_data']['seed'] = seed
         return self.storage.data['token']
 
     def get(self, request, *args, **kwargs):
