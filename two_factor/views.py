@@ -25,7 +25,7 @@ from django.views.generic import FormView
 from oath.totp import totp
 from two_factor.call_gateways import call
 from two_factor.forms import ComputerVerificationForm, MethodForm, \
-    TokenVerificationForm, PhoneForm, DisableForm
+    TokenVerificationForm, PhoneForm, DisableForm, OptionalPhoneForm
 from two_factor.models import VerifiedComputer, Token
 from two_factor.sms_gateways import send
 from two_factor.util import generate_seed, get_qr_url, class_view_decorator
@@ -208,6 +208,8 @@ class Enable(SessionWizardView):
         ('welcome', Form),
         ('method', MethodForm),
         ('generator', TokenVerificationForm),
+        ('backup', OptionalPhoneForm),
+        ('backup-verify', TokenVerificationForm),
         ('sms', PhoneForm),
         ('sms-verify', TokenVerificationForm),
         ('call', PhoneForm),
@@ -215,6 +217,9 @@ class Enable(SessionWizardView):
     ])
     condition_dict = {
         'generator': lambda x: Enable.is_method(x, 'generator'),
+        'backup': lambda x: Enable.is_method(x, 'generator'),
+        'backup-verify': lambda x: Enable.is_method(x, 'generator') and
+                Enable.get_form_data(x, 'backup', 'phone'),
         'sms': lambda x: Enable.is_method(x, 'sms'),
         'sms-verify': lambda x: Enable.is_method(x, 'sms'),
         'call': lambda x: Enable.is_method(x, 'call'),
@@ -263,22 +268,28 @@ class Enable(SessionWizardView):
             token.phone = form_data[2]['phone']
         elif token.method == 'call':
             token.phone = form_data[2]['phone']
+        elif token.method == 'generator':
+            phone = form_data[2]['phone']
+            if phone:
+                token.backup_phone = phone
         token.save()
         return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
 
     def render_next_step(self, form, **kwargs):
         response = super(Enable, self).render_next_step(form, **kwargs)
-        if self.steps.current in ['call-verify', 'sms-verify']:
+        if self.steps.current in ['call-verify', 'sms-verify', 'backup-verify']:
             method = self.get_form_data('method', 'method')
-            #todo use backup phone
             #todo resend message + throttling
             generated_token = totp(self.get_token().seed)
+            phone = self.get_form_data(method, 'phone')
             if method == 'call':
-                phone = self.get_form_data('call', 'phone')
                 call(to=phone, request=self.request, token=generated_token)
             elif method == 'sms':
-                phone = self.get_form_data('sms', 'phone')
                 send(to=phone, request=self.request, token=generated_token)
+            elif method == 'backup':
+                if phone:
+                    send(to=phone, request=self.request, token=generated_token)
+                    
         return response
 
 

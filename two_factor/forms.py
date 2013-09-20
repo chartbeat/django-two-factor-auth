@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from oath import accept_totp
 from two_factor.models import TOKEN_METHODS
 from django.conf import settings
+import re
 
 TF_FORWARD_DRIFT = getattr(settings,'TF_FORWARD_DRIFT', 1)
 TF_BACKWARD_DRIFT = getattr(settings,'TF_BACKWARD_DRIFT', 1)
@@ -45,11 +46,17 @@ class MethodForm(forms.Form):
 
 
 class PhoneForm(forms.Form):
-    error_messages = {
-        'invalid_phone': _('Please enter a valid phone number.')
-    }
-
     phone = forms.CharField(label=_('Phone Number'), max_length=14)
+    
+    def clean(self):
+        phone = self.cleaned_data.get('phone', '')
+        self.cleaned_data['phone'] = re.sub('[^+0-9]','', phone)
+        return self.cleaned_data
+
+
+class OptionalPhoneForm(PhoneForm):
+    phone = forms.CharField(label=_('Phone Number'), max_length=14,
+                            required=False)
 
 
 class TokenVerificationForm(forms.Form):

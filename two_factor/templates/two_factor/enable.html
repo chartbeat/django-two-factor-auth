@@ -21,11 +21,15 @@
             {% endblocktrans %}</p>
         <p><img src="{{ qr_url }}" alt="QR Code" /></p>
         <p>{% blocktrans %}Code: {{ seed }}{% endblocktrans %}</p>
+    {% elif wizard.steps.current == 'backup' %}
+        <p>{% blocktrans %}We recommend entering a backup phone number to that
+            can receive codes via text message. This number will be validated
+            in the next step (or press next to skip).{% endblocktrans %}</p>
     {% elif wizard.steps.current == 'sms' %}
         <p>{% blocktrans %}Please enter the phone number you wish to receive
             the text messages on. This number will be validated in the next
             step.{% endblocktrans %}</p>
-    {% elif wizard.steps.current == 'sms-verify' %}
+    {% elif wizard.steps.current == 'sms-verify' or  wizard.steps.current == 'backup-verify' %}
         <p>{% blocktrans %}A text message has been sent, please enter the
             authentication code displayed on your phone.{% endblocktrans %}</p>
     {% elif wizard.steps.current == 'call' %}
