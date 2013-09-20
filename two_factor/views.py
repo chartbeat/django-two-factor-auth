@@ -281,12 +281,14 @@ class Enable(SessionWizardView):
             method = self.get_form_data('method', 'method')
             #todo resend message + throttling
             generated_token = totp(self.get_token().seed)
-            phone = self.get_form_data(method, 'phone')
             if method == 'call':
+                phone = self.get_form_data('call', 'phone')
                 call(to=phone, request=self.request, token=generated_token)
             elif method == 'sms':
+                phone = self.get_form_data('sms', 'phone')
                 send(to=phone, request=self.request, token=generated_token)
             elif method == 'backup':
+                phone = self.get_form_data('backup', 'phone')
                 if phone:
                     send(to=phone, request=self.request, token=generated_token)
                     
