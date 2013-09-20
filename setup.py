@@ -8,12 +8,12 @@ if sys.version_info >= (3,):
 
 setup(
     name='django-two-factor-auth',
-    version='0.2.1',
+    version='0.2.2',
     author='Bouke Haarsma',
     author_email='bouke@webatoom.nl',
     packages=find_packages(exclude=('demo', 'tests',)),
     package_data={'two_factor': ['templates/two_factor/*.html', ], },
-    url='http://github.com/Bouke/django-two-factor-auth',
+    url='http://github.com/chartbeat/django-two-factor-auth',
     description='Complete Two-Factor Authentication for Django',
     license='MIT',
     long_description=open('README.rst').read(),
