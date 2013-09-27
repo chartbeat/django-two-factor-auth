@@ -168,7 +168,7 @@ def verify_computer(request, template_name='two_factor/verify_computer.html',
             if token.method == 'call':
                 call(to=token.phone, request=request, token=generated_token)
             elif token.method == 'sms':
-                send(to=token.phone, request=request, token=generated_token)
+                send(to=token.phone, request=request, user_token=token, code=generated_token)
 
     current_site = get_current_site(request)
 
