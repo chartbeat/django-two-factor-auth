@@ -1,8 +1,10 @@
+from datetime import datetime, timedelta
 from django.conf import settings
 from django.utils.importlib import import_module
 from django.utils.translation import ugettext
 
 GATEWAY = getattr(settings, 'TF_SMS_GATEWAY', 'two_factor.sms_gateways.Fake')
+RATE_LIMIT = getattr(settings, 'TF_RATE_LIMIT', 20)
 
 
 def load_gateway(path):
@@ -16,13 +18,23 @@ def get_gateway():
     return GATEWAY and load_gateway(GATEWAY)
 
 
-def send(to, token, **kwargs):
-    get_gateway().send(to=to, token=token, **kwargs)
+def send(to, code, user_token=None, **kwargs):
+    # user_token must be passed for rate limiting, but isn't required
+    # because not all messages have a user token associated with them
+    # (ie, the initial enable form messages)
+    if user_token:
+        time_window = datetime.now() - timedelta(seconds=RATE_LIMIT)
+        if user_token.last_sent and user_token.last_sent > time_window:
+            return False
+        user_token.last_sent = datetime.now()
+        user_token.save()
+    get_gateway().send(to=to, code=code, **kwargs)
+    return True
 
 
 class Fake(object):
-    def send(self, to, token, **kwargs):
-        print 'Fake SMS to %s: "Your token is: %s"' % (to, token)
+    def send(self, to, code, **kwargs):
+        print 'Fake SMS to %s: "Your token is: %s"' % (to, code)
 
 
 class Twilio(object):
@@ -37,6 +49,6 @@ class Twilio(object):
         from twilio.rest import TwilioRestClient
         self.client = TwilioRestClient(account, token)
 
-    def send(self, to, token, **kwargs):
-        body = ugettext('Your authentication token is %s' % token)
+    def send(self, to, code, **kwargs):
+        body = ugettext('Your authentication token is %s' % code)
         self.client.sms.messages.create(to=to, from_=self.caller_id, body=body)

@@ -39,3 +39,5 @@ class Token(models.Model):
     phone = models.CharField(_('phone number'), max_length=16)
     backup_phone = models.CharField(_('backup phone number'), max_length=16,
                                     null=True, blank=True)
+
+    last_sent = models.DateTimeField(null=True)
