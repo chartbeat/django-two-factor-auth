@@ -287,7 +287,7 @@ class Enable(SessionWizardView):
             elif method == 'sms':
                 phone = self.get_form_data('sms', 'phone')
                 send(to=phone, request=self.request, code=generated_token)
-            elif method == 'backup':
+            elif method == 'generator':
                 phone = self.get_form_data('backup', 'phone')
                 if phone:
                     send(to=phone, request=self.request, code=generated_token)
