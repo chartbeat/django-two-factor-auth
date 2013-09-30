@@ -14,7 +14,8 @@ class ComputerVerificationForm(forms.Form):
     Base class for computer verification. Extend this to get a form that
     accepts token values.
     """
-    token = forms.CharField(label=_("Token"), max_length=6)
+    token = forms.CharField(label=_("Token"), max_length=6,
+                            widget=forms.TextInput(attrs={'autocomplete':'off'}))
     remember = forms.BooleanField(
         label=_("Remember this computer for 30 days"), required=False)
 
@@ -60,7 +61,8 @@ class OptionalPhoneForm(PhoneForm):
 
 
 class TokenVerificationForm(forms.Form):
-    token = forms.CharField(label=_("Token"), min_length=6, max_length=6)
+    token = forms.CharField(label=_("Token"), min_length=6, max_length=6,
+                            widget=forms.TextInput(attrs={'autocomplete':'off'}))
     seed = None
 
     error_messages = {
