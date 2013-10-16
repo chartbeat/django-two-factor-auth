@@ -25,16 +25,17 @@ def send(to, code, user_token=None, **kwargs):
     if user_token:
         time_window = datetime.now() - timedelta(seconds=RATE_LIMIT)
         if user_token.last_sent and user_token.last_sent > time_window:
-            return False
+            return {'ok': False,
+                    'error_msg': 'You can only resend your code once every %d seconds.' % RATE_LIMIT}
         user_token.last_sent = datetime.now()
         user_token.save()
-    get_gateway().send(to=to, code=code, **kwargs)
-    return True
+    return get_gateway().send(to=to, code=code, **kwargs)
 
 
 class Fake(object):
     def send(self, to, code, **kwargs):
         print 'Fake SMS to %s: "Your token is: %s"' % (to, code)
+        return {'ok': True}
 
 
 class Twilio(object):

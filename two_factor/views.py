@@ -103,6 +103,7 @@ def verify_computer(request, template_name='two_factor/verify_computer.html',
                     computer_verification_form=ComputerVerificationForm,
                     current_app=None, extra_context=None):
 
+    error_message = None
     redirect_to = request.REQUEST.get(redirect_field_name, '')
     netloc = urlparse.urlparse(redirect_to)[1]
 
@@ -168,7 +169,9 @@ def verify_computer(request, template_name='two_factor/verify_computer.html',
             if token.method == 'call':
                 call(to=token.phone, request=request, token=generated_token)
             elif token.method == 'sms':
-                send(to=token.phone, request=request, user_token=token, code=generated_token)
+                response = send(to=token.phone, request=request, user_token=token, code=generated_token)
+                if not response.get('ok', False):
+                    error_message = response.get('error_msg', 'There was a problem sending your code.')
 
     current_site = get_current_site(request)
 
@@ -177,6 +180,7 @@ def verify_computer(request, template_name='two_factor/verify_computer.html',
         redirect_field_name: redirect_to,
         'site': current_site,
         'site_name': current_site.name,
+        'error_message': error_message,
     }
     if extra_context is not None:
         context.update(extra_context)
@@ -276,22 +280,26 @@ class Enable(SessionWizardView):
         return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
 
     def render_next_step(self, form, **kwargs):
-        response = super(Enable, self).render_next_step(form, **kwargs)
-        if self.steps.current in ['call-verify', 'sms-verify', 'backup-verify']:
+        if self.steps.next in ['call-verify', 'sms-verify', 'backup-verify']:
             method = self.get_form_data('method', 'method')
             #todo resend message + throttling
             generated_token = totp(self.get_token().seed)
+            message_response = None
             if method == 'call':
                 phone = self.get_form_data('call', 'phone')
                 call(to=phone, request=self.request, token=generated_token)
             elif method == 'sms':
                 phone = self.get_form_data('sms', 'phone')
-                send(to=phone, request=self.request, code=generated_token)
+                message_response = send(to=phone, request=self.request, code=generated_token)
             elif method == 'generator':
                 phone = self.get_form_data('backup', 'phone')
                 if phone:
-                    send(to=phone, request=self.request, code=generated_token)
+                    message_response = send(to=phone, request=self.request, code=generated_token)
                     
+            if message_response and not message_response.get('ok', False):
+                self.storage.data['extra_data']['error_message'] = message_response.get('error_msg', 'There was a problem sending your code.')
+
+        response = super(Enable, self).render_next_step(form, **kwargs)
         return response
 
 
