@@ -14,13 +14,13 @@ class ComputerVerificationForm(forms.Form):
     Base class for computer verification. Extend this to get a form that
     accepts token values.
     """
-    token = forms.CharField(label=_("Token"), max_length=6,
+    token = forms.CharField(label=_("Verification Code"), max_length=6,
                             widget=forms.TextInput(attrs={'autocomplete':'off'}))
     remember = forms.BooleanField(
         label=_("Remember this computer for 30 days"), required=False)
 
     error_messages = {
-        'invalid_token': _("Please enter a valid token."),
+        'invalid_token': _("Please enter a valid code."),
         'inactive': _("This account is inactive."),
     }
 
@@ -61,12 +61,12 @@ class OptionalPhoneForm(PhoneForm):
 
 
 class TokenVerificationForm(forms.Form):
-    token = forms.CharField(label=_("Token"), min_length=6, max_length=6,
+    token = forms.CharField(label=_("Verification Code"), min_length=6, max_length=6,
                             widget=forms.TextInput(attrs={'autocomplete':'off'}))
     seed = None
 
     error_messages = {
-        'invalid_token': _("Please enter a valid token."),
+        'invalid_token': _("Please enter a valid code."),
     }
 
     def clean(self):
