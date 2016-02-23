@@ -9,4 +9,4 @@ def redirect_admin_login(self, request):
 
 sites.AdminSite.login = redirect_admin_login
 
-__version__ = (0, 3, 4)
+__version__ = (0, 3, 4, 'cb', 0)
