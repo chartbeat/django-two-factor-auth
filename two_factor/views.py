@@ -2,7 +2,7 @@ from datetime import timedelta
 import urlparse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from formtools.wizard.views import WizardView
+from formtools.wizard.views import SessionWizardView, WizardView
 from django.contrib.sites.models import get_current_site
 from django.core.signing import Signer, BadSignature
 from django.core.urlresolvers import reverse
