@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core.signing import Signer
 from django.core.urlresolvers import reverse
 from django.utils.http import urlencode
-from django.utils.importlib import import_module
+from importlib import import_module
 
 GATEWAY = getattr(settings, 'TF_CALL_GATEWAY', 'two_factor.call_gateways.Fake')
 
