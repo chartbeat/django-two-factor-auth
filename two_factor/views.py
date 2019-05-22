@@ -10,7 +10,7 @@ from django.forms import Form
 from django.http import HttpResponseRedirect, HttpResponse, \
     HttpResponseBadRequest
 from django.template.response import TemplateResponse
-from django.utils.datastructures import SortedDict
+from collections import OrderedDict
 from django.utils.http import urlencode
 from django.utils.timezone import now
 from django.views.decorators.debug import sensitive_post_parameters
@@ -208,7 +208,7 @@ class Disable(FormView):
 class Enable(SessionWizardView):
     template_name = 'two_factor/enable.html'
     initial_dict = {}
-    form_list = SortedDict([
+    form_list = OrderedDict([
         ('welcome', Form),
         ('method', MethodForm),
         ('generator', TokenVerificationForm),

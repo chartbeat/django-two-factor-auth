@@ -24,7 +24,7 @@ class VerifiedComputer(models.Model):
     user = models.ForeignKey(User, verbose_name=_('verified computer'),
                              related_name='tf_verified_computers')
     verified_until = models.DateTimeField(_('verified until'))
-    ip = models.IPAddressField(_('IP address'))
+    ip = models.GenericIPAddressField(_('IP address'))
     last_used_at = models.DateTimeField(_('last used at'))
 
 
