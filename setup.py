@@ -8,7 +8,7 @@ if sys.version_info >= (3,):
 
 setup(
     name='django-two-factor-auth',
-    version='0.3.4.cb.5',
+    version='0.3.4.cb.6',
     author='Bouke Haarsma',
     author_email='bouke@webatoom.nl',
     packages=find_packages(exclude=('demo', 'tests',)),
