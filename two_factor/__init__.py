@@ -8,5 +8,3 @@ def redirect_admin_login(self, request):
     return redirect(settings.LOGIN_URL)
 
 sites.AdminSite.login = redirect_admin_login
-
-__version__ = (0, 3, 4, 'cb', 4)
