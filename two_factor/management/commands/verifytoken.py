@@ -1,3 +1,4 @@
+from __future__ import print_function
 from django.contrib.auth.models import User
 from django.core.management import BaseCommand, CommandError
 from oath.totp import accept_totp
@@ -27,6 +28,6 @@ class Command(BaseCommand):
                                       backward_drift=TF_BACKWARD_DRIFT)
 
         if accepted:
-            print 'Token accepted (clock drifted %s seconds)' % drift
+            print("Token accepted (clock drifted {} seconds)".format(drift))
         else:
-            print 'Token not accepted'
+            print("Token not accepted")

@@ -1,7 +1,11 @@
+from future import standard_library
+standard_library.install_aliases()
+from builtins import chr
+from builtins import range
 import random
 from base64 import b32encode
 from binascii import hexlify, unhexlify
-from urllib import urlencode
+from urllib.parse import urlencode
 from django.utils.decorators import method_decorator
 
 

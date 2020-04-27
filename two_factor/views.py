@@ -1,5 +1,7 @@
+from future import standard_library
+standard_library.install_aliases()
 from datetime import timedelta
-import urlparse
+import urllib.parse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from formtools.wizard.views import SessionWizardView, WizardView
@@ -44,7 +46,7 @@ def login(request, template_name='two_factor/login.html',
     Displays the login form and handles the two factor login action.
     """
     redirect_to = request.REQUEST.get(redirect_field_name, '')
-    netloc = urlparse.urlparse(redirect_to)[1]
+    netloc = urllib.parse.urlparse(redirect_to)[1]
 
     # Use default setting if redirect_to is empty
     if not redirect_to:
@@ -105,7 +107,7 @@ def verify_computer(request, template_name='two_factor/verify_computer.html',
 
     error_message = None
     redirect_to = request.REQUEST.get(redirect_field_name, '')
-    netloc = urlparse.urlparse(redirect_to)[1]
+    netloc = urllib.parse.urlparse(redirect_to)[1]
 
     # Use default setting if redirect_to is empty
     if not redirect_to:
@@ -280,7 +282,7 @@ class Enable(SessionWizardView):
         return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
 
     def render_next_step(self, form, **kwargs):
-        if self.steps.next in ['call-verify', 'sms-verify', 'backup-verify']:
+        if self.steps.__next__ in ['call-verify', 'sms-verify', 'backup-verify']:
             method = self.get_form_data('method', 'method')
             #todo resend message + throttling
             generated_token = totp(self.get_token().seed)

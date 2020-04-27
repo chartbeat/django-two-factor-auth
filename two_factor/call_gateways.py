@@ -1,3 +1,5 @@
+from __future__ import print_function
+from builtins import object
 from django.conf import settings
 from django.core.signing import Signer
 from django.core.urlresolvers import reverse
@@ -24,7 +26,7 @@ def call(to, token, **kwargs):
 
 class Fake(object):
     def call(self, to, token, **kwargs):
-        print 'Fake call to %s: "Your token is: %s"' % (to, token)
+        print('Fake call to {}: "Your token is: {}"'.format(to, token))
 
 
 class Twilio(object):

@@ -1,3 +1,5 @@
+from __future__ import print_function
+from builtins import object
 from datetime import datetime, timedelta
 from django.conf import settings
 from importlib import import_module
@@ -34,7 +36,7 @@ def send(to, code, user_token=None, **kwargs):
 
 class Fake(object):
     def send(self, to, code, **kwargs):
-        print 'Fake SMS to %s: "Your token is: %s"' % (to, code)
+        print('Fake SMS to {}: "Your token is: {}"'.format(to, code))
         return {'ok': True}
 
 

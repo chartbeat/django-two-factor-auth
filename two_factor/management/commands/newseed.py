@@ -1,3 +1,4 @@
+from __future__ import print_function
 from django.contrib.auth.models import User
 from django.core.management import BaseCommand, CommandError
 from two_factor.models import Token
@@ -24,9 +25,9 @@ class Command(BaseCommand):
         token.seed = generate_seed()
         token.save()
 
-        print 'Updated seed for %s to: %s (hex)' % (user.username, token.seed)
-        print ''
-        print 'QR Code for Google Authenticator can be found here:'
-        print ''
-        print get_qr_url(user.username, token.seed)
-        print ''
+        print("Updated seed for {} to: {} (hex)".format(user.username, token.seed))
+        print("")
+        print("QR Code for Google Authenticator can be found here:")
+        print("")
+        print(get_qr_url(user.username, token.seed))
+        print("")
