@@ -282,7 +282,7 @@ class Enable(SessionWizardView):
         return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
 
     def render_next_step(self, form, **kwargs):
-        if self.steps.__next__ in ['call-verify', 'sms-verify', 'backup-verify']:
+        if self.steps.next in ['call-verify', 'sms-verify', 'backup-verify']:
             method = self.get_form_data('method', 'method')
             #todo resend message + throttling
             generated_token = totp(self.get_token().seed)
