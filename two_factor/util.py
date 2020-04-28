@@ -10,7 +10,7 @@ from django.utils.decorators import method_decorator
 
 
 def generate_seed(length=10):
-    return hexlify(''.join([chr(random.randint(0, 255))
+    return hexlify(''.join([chr(random.randint(0, 255)).encode("latin-1")
                             for _ in range(length)]))
 
 
