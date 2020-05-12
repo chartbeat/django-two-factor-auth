@@ -122,7 +122,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'two_factor',
-    'south',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -168,9 +167,6 @@ LOGGING = {
 
 LOGIN_URL = reverse_lazy('tf:login')
 LOGIN_REDIRECT_URL = reverse_lazy('profile')
-
-# django-discover-runner
-TEST_RUNNER = 'discover_runner.DiscoverRunner'
 
 # load settings that are not in git repo
 try:

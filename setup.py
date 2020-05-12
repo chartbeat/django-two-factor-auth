@@ -18,7 +18,7 @@ setup(
     license='MIT',
     long_description=open('README.rst').read(),
     install_requires=[
-        'oath == 1.1'
+        'oath == 1.4.3'
     ],
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
