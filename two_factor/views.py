@@ -24,7 +24,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.conf import settings
 from django.utils.translation import ugettext
 from django.views.generic import FormView
-from oath.totp import totp
+from oath import totp
 from two_factor.call_gateways import call
 from two_factor.forms import ComputerVerificationForm, MethodForm, \
     TokenVerificationForm, PhoneForm, DisableForm, OptionalPhoneForm
