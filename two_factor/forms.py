@@ -72,7 +72,7 @@ class TokenVerificationForm(forms.Form):
     def clean(self):
         token = self.cleaned_data.get('token')
         if token:
-            accepted, drift = accept_totp(key=self.seed, response=token,
+            accepted, drift = accept_totp(key=self.seed.decode(), response=token,
                                           forward_drift=TF_FORWARD_DRIFT,
                                           backward_drift=TF_BACKWARD_DRIFT)
             if not accepted:
