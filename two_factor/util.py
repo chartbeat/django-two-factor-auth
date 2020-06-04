@@ -10,13 +10,13 @@ from django.utils.decorators import method_decorator
 
 
 def generate_seed(length=10):
-    rand_str_list = map(str, [random.randint(0, 255) for _ in range(length)])
+    rand_str_list = map(chr, [random.randint(0, 255) for _ in range(length)])
     return hexlify(''.join(rand_str_list).encode())
 
 
 def get_otpauth_url(alias, seed):
     seed_b32 = b32encode(unhexlify(seed))
-    return 'otpauth://totp/%s?secret=%s' % (alias, seed_b32)
+    return "otpauth://totp/{}?secret={}".format(alias, seed_b32.decode())
 
 
 def get_qr_url(alias, seed):
