@@ -22,7 +22,8 @@ if sms_gateways.GATEWAY:
 
 class VerifiedComputer(models.Model):
     user = models.ForeignKey(User, verbose_name=_('verified computer'),
-                             related_name='tf_verified_computers')
+                             related_name='tf_verified_computers',
+                             on_delete=models.CASCADE)
     verified_until = models.DateTimeField(_('verified until'))
     ip = models.GenericIPAddressField(_('IP address'))
     last_used_at = models.DateTimeField(_('last used at'))
@@ -30,7 +31,8 @@ class VerifiedComputer(models.Model):
 
 class Token(models.Model):
     user = models.OneToOneField(User, verbose_name=_('user'), 
-                                related_name='tf_token')
+                                related_name='tf_token',
+                                on_delete=models.CASCADE)
     seed = models.CharField(_('seed'), max_length=32)
 
     method = models.CharField(_('authentication method'),

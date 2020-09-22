@@ -2,7 +2,7 @@ from __future__ import print_function
 from builtins import object
 from django.conf import settings
 from django.core.signing import Signer
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.http import urlencode
 from importlib import import_module
 

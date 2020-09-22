@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from formtools.wizard.views import SessionWizardView
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.signing import Signer, BadSignature
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.forms import Form
 from django.http import HttpResponseRedirect, HttpResponse, \
     HttpResponseBadRequest
