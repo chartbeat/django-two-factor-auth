@@ -8,7 +8,7 @@ TF_BACKWARD_DRIFT = getattr(settings,'TF_BACKWARD_DRIFT', 1)
 
 
 class TokenBackend(ModelBackend):
-    def authenticate(self, user, token):
+    def authenticate(self, request, user, token):
         accepted, drift = accept_totp(key=user.tf_token.seed, response=token,
                                       forward_drift=TF_FORWARD_DRIFT,
                                       backward_drift=TF_BACKWARD_DRIFT)
@@ -16,7 +16,7 @@ class TokenBackend(ModelBackend):
 
 
 class VerifiedComputerBackend(ModelBackend):
-    def authenticate(self, user, computer_id):
+    def authenticate(self, request, user, computer_id):
         verification = user.tf_verified_computers.get(pk=computer_id)
         if verification.verified_until < now():
             return None
