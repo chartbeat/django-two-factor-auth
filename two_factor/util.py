@@ -11,7 +11,7 @@ from django.utils.decorators import method_decorator
 
 def generate_seed(length=10):
     rand_str_list = map(chr, [random.randint(0, 255) for _ in range(length)])
-    return hexlify(''.join(rand_str_list).encode())
+    return hexlify(''.join(rand_str_list).encode()).decode()
 
 
 def get_otpauth_url(alias, seed):

@@ -286,7 +286,7 @@ class Enable(SessionWizardView):
         if next_val_index < self.steps.count and self.steps.all[next_val_index] in ['call-verify', 'sms-verify', 'backup-verify']:
             method = self.get_form_data('method', 'method')
             #todo resend message + throttling
-            generated_token = totp(self.get_token().seed.decode())
+            generated_token = totp(self.get_token().seed)
             message_response = None
             if method == 'call':
                 phone = self.get_form_data('call', 'phone')
