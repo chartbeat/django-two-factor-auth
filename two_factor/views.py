@@ -1,5 +1,3 @@
-from future import standard_library
-standard_library.install_aliases()
 from datetime import timedelta
 import urllib.parse
 from django.contrib.auth.decorators import login_required
