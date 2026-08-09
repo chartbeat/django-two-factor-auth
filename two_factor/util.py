@@ -18,7 +18,7 @@ def get_otpauth_url(alias, seed):
 
 
 def get_qr_url(alias, seed):
-    return "https://chart.googleapis.com/chart?" + urlencode({
+    return "https://quickchart.io/chart?" + urlencode({
         "chs": "200x200",
         "chld": "M|0",
         "cht": "qr",
